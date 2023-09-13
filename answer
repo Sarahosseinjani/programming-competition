@@ -1,0 +1,40 @@
+def find_dice_value(board):
+    n = len(board)
+    left, right = 1, n - 1
+    max_steps = 0
+    best_dice_value = 0
+
+    while left <= right:
+        mid = (left + right) // 2
+        steps = roll_dice(board, mid)
+        if steps > max_steps:
+            max_steps = steps
+            best_dice_value = mid
+        if can_reach_end(board, mid):
+            right = mid - 1
+        else:
+            left = mid + 1
+
+    return best_dice_value, max_steps
+
+def roll_dice(board, dice_value):
+    n = len(board)
+    position = 0
+    steps = 0
+    while position < n - 1:
+        position += dice_value
+        if position >= n:
+            break
+        steps += 1
+        position += board[position]
+    return steps
+
+def can_reach_end(board, dice_value):
+    n = len(board)
+    position = 0
+    while position < n - 1:
+        position += dice_value
+        if position >= n:
+            return False
+        position += board[position]
+    return True
